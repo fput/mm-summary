@@ -6,6 +6,7 @@ import datetime as dt
 import plistlib
 import re
 import subprocess
+import sys
 from decimal import Decimal, InvalidOperation
 from typing import Any
 
@@ -20,6 +21,15 @@ __all__ = [
 ]
 
 CATEGORY_SPLIT_RE = re.compile(r"\s*(?:>|›|→|/|\\|:)\s*")
+WARNING_DEBUG_FIELDS = (
+    "id",
+    "bookingDate",
+    "valueDate",
+    "amount",
+    "category",
+    "name",
+    "purpose",
+)
 
 
 def applescript_export_transactions(
@@ -76,9 +86,15 @@ def parse_transactions(
 ) -> list[Transaction]:
     parsed: list[Transaction] = []
 
-    for raw in raw_transactions:
+    for index, raw in enumerate(raw_transactions, start=1):
+        amount = _parse_decimal(raw.get("amount"), raw, index)
         booking_date = _booking_date_from_raw(raw)
         if booking_date is None:
+            _warn_transaction(
+                "Skipping transaction with no usable bookingDate/valueDate",
+                raw,
+                index,
+            )
             continue
 
         group, category = _split_category_path(raw.get("category"), taxonomy=taxonomy)
@@ -87,7 +103,7 @@ def parse_transactions(
                 booking_date=booking_date,
                 group=group,
                 category=category,
-                amount=_parse_decimal(raw.get("amount")),
+                amount=amount,
                 name=_normalize_text(raw.get("name")),
                 purpose=_normalize_text(raw.get("purpose")),
                 comment=_normalize_text(raw.get("comment")),
@@ -109,10 +125,13 @@ def _applescript_string(value: str) -> str:
     return f'"{escaped}"'
 
 
-def _parse_decimal(value: Any) -> Money:
+def _parse_decimal(value: Any, raw: dict[str, Any], index: int) -> Money:
     try:
-        return Decimal(str(value or "0"))
+        return Decimal(str(value))
     except (InvalidOperation, ValueError, TypeError):
+        _warn_transaction(
+            "Using 0 for transaction with invalid or missing amount", raw, index
+        )
         return Decimal("0")
 
 
@@ -148,3 +167,25 @@ def _split_category_path(
         " / ".join(parts[1:]).strip() if len(parts) > 1 else taxonomy.no_subcategory
     )
     return group, category or taxonomy.uncategorized_category
+
+
+def _warn_transaction(message: str, raw: dict[str, Any], index: int) -> None:
+    print(
+        f"WARNING: {message} ({_transaction_debug_info(raw, index)})",
+        file=sys.stderr,
+    )
+
+
+def _transaction_debug_info(raw: dict[str, Any], index: int) -> str:
+    parts = [f"transaction_index={index}"]
+    for key in WARNING_DEBUG_FIELDS:
+        if key in raw:
+            parts.append(f"{key}={_debug_value(raw.get(key))}")
+    return ", ".join(parts)
+
+
+def _debug_value(value: Any, max_len: int = 80) -> str:
+    text = repr(value)
+    if len(text) <= max_len:
+        return text
+    return text[: max_len - 1].rstrip() + "…"

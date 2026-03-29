@@ -75,3 +75,9 @@ options:
 - [`models.py`](./models.py): shared dataclasses and type aliases
 - [`sample_data.py`](./sample_data.py): deterministic sample transactions for demo workbooks
 - [`user_config.py`](./user_config.py): your taxonomy, aliases, ordering
+
+## Disclaimer
+
+This project is provided as-is, without any warranty. It may contain bugs and may produce incomplete, misleading, or incorrect summaries.
+
+Licensed under the Apache License 2.0. See `LICENSE`.
