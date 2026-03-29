@@ -146,7 +146,7 @@ def _is_routine_transaction(tx: Transaction, routine_patterns: tuple[str, ...]) 
     haystack = " ".join(
         [tx.group, tx.category, tx.name, tx.booking_text, tx.purpose]
     ).lower()
-    return any(pattern in haystack for pattern in routine_patterns)
+    return any(pattern.lower() in haystack for pattern in routine_patterns)
 
 
 def _dedupe_keep_order(items: Iterable[str]) -> list[str]:
