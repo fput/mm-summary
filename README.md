@@ -1,4 +1,4 @@
-# mm-summary
+# MoneyMoney to Excel
 
 Generate a compact yearly Excel summary from MoneyMoney transactions.
 
