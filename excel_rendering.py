@@ -1,5 +1,19 @@
 """Excel workbook rendering."""
 
+# Sheet layout:
+#
+#   A          B     C    …  M     N       O
+#   [Year]     Jan   Feb  …  Dec   Total   Average
+#   Income                                 (avg label)
+#     Salary   100        …
+#   Total Inc  ───        …
+#   Expenses
+#     Group A
+#       Cat1   50         …
+#   Total Exp  ───        …
+#   Savings    =Inc-Exp   …
+#   Savings %  =Sav/Inc   …
+
 from __future__ import annotations
 
 import datetime as dt
