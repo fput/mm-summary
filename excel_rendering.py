@@ -441,6 +441,7 @@ class SummarySheetRenderer:
         self.avg_month_count, self.avg_label = average_context(year)
 
     def render(self) -> None:
+        # Build the sheet top to bottom.
         self._render_header_row()
         self.income_total_row = self._render_income_block()
         self.expense_total_row = self._render_expense_block()
@@ -612,6 +613,7 @@ class SummarySheetRenderer:
         return row
 
     def _render_income_block(self) -> int:
+        # Flat rows of income categories.
         self._write_label_row(
             "Income",
             base_fill=self.styles.fill_income_header,
@@ -651,6 +653,7 @@ class SummarySheetRenderer:
         )
 
     def _render_expense_block(self) -> int:
+        # Rows of expense categories with group headers in between.
         self._write_label_row(
             "Expenses",
             base_fill=self.styles.fill_expense_header,
