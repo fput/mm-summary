@@ -38,6 +38,7 @@ def applescript_export_transactions(
     start = f"{year}-01-01"
     end = f"{year}-12-31"
 
+    # Requires MoneyMoney to be unlocked.
     parts = ['tell application "MoneyMoney" to export transactions']
     if account:
         parts.append(f"from account {_applescript_string(account)}")
