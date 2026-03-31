@@ -24,7 +24,7 @@ from user_config import DEFAULT_TAXONOMY
 
 def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Export MoneyMoney transactions and build an Excel year summary."
+        description="Export MoneyMoney transactions and build an Excel summary for a specific year."
     )
     parser.add_argument(
         "--year",
@@ -53,17 +53,17 @@ def _parse_args(argv: list[str]) -> argparse.Namespace:
     parser.add_argument(
         "--include-transactions-sheet",
         action="store_true",
-        help="Include a Transactions sheet with booked raw export rows",
+        help="Include a Transactions sheet with raw export rows",
     )
     parser.add_argument(
         "--sample-data",
         action="store_true",
-        help="Generate a built-in sample workbook for docs or screenshots",
+        help="Generate a built-in sample workbook",
     )
     parser.add_argument(
         "--no-expense-heatmap",
         action="store_true",
-        help="Disable the subtle heatmap on expense month cells",
+        help="Disable the heatmap on expense month cells",
     )
     return parser.parse_args(argv)
 
