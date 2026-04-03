@@ -49,7 +49,7 @@ usage: mm_summary.py [-h] [--year YEAR] [--account ACCOUNT]
                      [--no-cell-comments] [--include-transactions-sheet]
                      [--sample-data] [--no-expense-heatmap]
 
-Export MoneyMoney transactions and build an Excel year summary.
+Export MoneyMoney transactions and build an Excel summary for a specific year.
 
 options:
   -h, --help            show this help message and exit
@@ -59,11 +59,10 @@ options:
   --output OUTPUT       Output .xlsx path
   --no-cell-comments    Do not add Excel comments
   --include-transactions-sheet
-                        Include a Transactions sheet with booked raw export
-                        rows
+                        Include a Transactions sheet with raw export rows
   --sample-data         Generate a built-in sample workbook for docs or
                         screenshots
-  --no-expense-heatmap  Disable the subtle heatmap on expense month cells
+  --no-expense-heatmap  Disable the heatmap on expense month cells
 ```
 
 ## Project Structure
